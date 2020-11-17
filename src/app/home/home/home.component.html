@@ -1,0 +1,8 @@
+<mat-tab-group (selectedTabChange)="changeFilterOption($event)">
+    <mat-tab *ngFor="let filterOption of filterOptions" [label]="filterOption.value">{{filterOption.value}} </mat-tab>
+</mat-tab-group>
+<mat-tab-group (selectedTabChange)="changeMovieCategory($event)">
+    <mat-tab *ngFor="let movieCategory of movieCategories" [label]="movieCategory.viewValue">{{movieCategory.viewValue}}
+    </mat-tab>
+</mat-tab-group>
+<movies-list [movies]="movies$ | async"></movies-list>

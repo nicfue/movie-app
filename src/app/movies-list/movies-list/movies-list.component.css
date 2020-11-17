@@ -1,0 +1,9 @@
+img {
+    width: 160px;
+}
+
+.badge {
+    position: relative;
+    bottom: 100px;
+    right: 150px;
+}

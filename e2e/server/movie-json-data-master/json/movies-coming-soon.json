@@ -1,5 +1,4 @@
-[
-    {
+[{
         "id": "1",
         "title": "Game Night",
         "year": "2018",
@@ -5208,5 +5207,5 @@
         ],
         "imdbRating": "",
         "posterurl": "https://images-na.ssl-images-amazon.com/images/M/MV5BMTYyMjAyMTI5NF5BMl5BanBnXkFtZTgwOTAxMTQ3NDM@._V1_SY500_CR0,0,337,500_AL_.jpg"
-    }            
+    }
 ]
