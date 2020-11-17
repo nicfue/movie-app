@@ -5,6 +5,11 @@ import { MoviesListComponent } from './movies-list/movies-list/movies-list.compo
 
 const routes: Routes = [
     {
+        path: '',
+        redirectTo: '/movies',
+        pathMatch: 'full'
+    },
+    {
         path: 'movies',
         loadChildren: () => import('./movies-list/movies.module').then(m => m.MoviesModule)
     }
