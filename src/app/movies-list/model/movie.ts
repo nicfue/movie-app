@@ -1,9 +1,6 @@
-import { GenreId } from './genreId';
-
+import { Genres } from './genres';
 export interface Movie {
     id: number;
-    genre_ids: Array<GenreId>;
-    original_language: string;
     original_title: string;
     overview: string;
     popularity: number;
@@ -11,7 +8,10 @@ export interface Movie {
     release_date: string;
     title: string;
     vote_average: number;
-    vote_count: number;
+    runtime: number;
+    tagline: string;
+    genres: Array<Genres>;
+    backdrop_path: string;
 }
 
 

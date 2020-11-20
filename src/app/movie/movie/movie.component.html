@@ -1,0 +1,28 @@
+<div class="movie-container" *ngIf="movie$ | async as movie">
+    <div class="poster">
+        <img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path">
+    </div>
+    <div class="detail-container">
+        <div class="detail">
+            <div class="title">
+                <h2>{{movie.title}} ({{movie.release_date.substring(0, 4)}})</h2>
+            </div>
+            <div class="facts">
+                <span>{{movie.release_date | date:'y-MM-dd'}}</span>
+                <span *ngFor="let genre of movie.genres">{{genre.name}}</span>
+                <span>{{runtime(movie.runtime)}}</span>
+            </div>
+            <div class="badge">
+                <p>{{movie.vote_average * 10 + '%'}}</p>
+            </div>
+            <div class="info">
+                <h3 class="tagline">{{movie.tagline}}</h3>
+                <h3>Översikt</h3>
+                <p>{{movie.overview}}</p>
+            </div>
+            <div>
+                <button type="button" class="back-button" (click)="goBack()">Tillbaka</button>
+            </div>
+        </div>
+    </div>
+</div>

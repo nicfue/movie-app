@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
@@ -10,12 +11,17 @@ import { MoviesService } from 'src/app/movies-list/services/movies.services';
 import { HomeComponent } from '../home/home/home.component';
 import { MoviesListComponent } from './movies-list/movies-list.component';
 import { MoviesRoutingModule } from './movies-routing.module';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
+import { LoadingComponent } from '../loading/loading/loading.component';
 
 @NgModule({
-    declarations: [HomeComponent, MoviesListComponent],
+    declarations: [
+        HomeComponent,
+        MoviesListComponent,
+        LoadingComponent
+    ],
     imports: [
         CommonModule,
         MoviesRoutingModule,
@@ -27,7 +33,8 @@ import {MatBadgeModule} from '@angular/material/badge';
         MatFormFieldModule,
         MatDividerModule,
         MatTabsModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatProgressSpinnerModule
     ],
     providers: [MoviesService, FormBuilder]
 })

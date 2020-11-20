@@ -1,14 +1,15 @@
 <ng-container *ngIf="movies">
     <mat-grid-list cols="5" rowHeight="175px" gutterSize="5px">
         <mat-grid-tile *ngFor="let movie of movies['results']" [colspan]="'1'" [rowspan]="'2.5'">
-            <img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path">
+            <img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" [queryParams]="{title: movie.title}" [routerLink]="[movie.id]">
             <mat-grid-tile-footer style="display: block">
                 <h3>{{movie.title}}</h3>
                 <p>{{movie.release_date | date:'d MMMM y'}}</p>
             </mat-grid-tile-footer>
             <p>
-                <span class="w3-badge w3-green badge">{{movie.vote_average}}</span>
+                <span class="w3-badge w3-large w3-padding w3-green badge">{{movie.vote_average * 10}}</span>
             </p>
         </mat-grid-tile>
     </mat-grid-list>
+    <loading [detectRoutingOngoing]="true"></loading>
 </ng-container>

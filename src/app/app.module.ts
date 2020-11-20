@@ -1,15 +1,19 @@
+import { BrowserAnimationsModule } from '@angular//platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule }  from '@angular/common/http'
-import { BrowserAnimationsModule } from '@angular//platform-browser/animations';
+import { MovieComponent } from './movie/movie/movie.component';
+import { MoviesService } from './movies-list/services/movies.services';
+
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MovieComponent
   ],
   imports: [
     BrowserModule,
@@ -17,7 +21,7 @@ import { BrowserAnimationsModule } from '@angular//platform-browser/animations';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [MoviesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

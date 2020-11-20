@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category';
 import { CategoryViewValue } from 'src/app/movies-list/model/category-view-value';
 import { FilterOption } from 'src/app/movies-list/model/filter-option';
@@ -38,17 +40,22 @@ export class HomeComponent implements OnInit {
     { value: Category.TOP_RATED, viewValue: CategoryViewValue.TOP_RATED_VIEW_VALUE },
   ]
 
-  constructor(private moviesService: MoviesService) {
+  constructor(
+    private moviesService: MoviesService,
+    private loadingService: LoadingService,
+    private router: Router
+  ) {
 
   }
 
   ngOnInit(): void {
-    this.movies$ = this.moviesService.loadMovies(Category.POPULAR).pipe(
+    const moviesData$ = this.moviesService.loadMovies(Category.POPULAR).pipe(
       tap(movies => {
         this.movies = movies['results'],
-        this.sortByPopularityAndVote(Filter.POPULAR_DESC, 'popularity');
+          this.sortByPopularityAndVote(Filter.POPULAR_DESC, 'popularity');
       })
     );
+    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$);
   }
 
   changeFilterOption(selected: MatTabChangeEvent) {
@@ -112,10 +119,13 @@ export class HomeComponent implements OnInit {
     } else {
       category = Category.TOP_RATED;
     }
-    this.movies$ = this.moviesService.loadMovies(category)
+    const moviesData$ = this.moviesService.loadMovies(category)
       .pipe(
         tap(movies => this.movies = movies['results'])
       )
+    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$);
+    this.router.navigate(['movies/' + category]);
+
   }
 }
 
