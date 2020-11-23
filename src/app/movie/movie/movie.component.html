@@ -16,9 +16,11 @@
                 <p>{{movie.vote_average * 10 + '%'}}</p>
             </div>
             <div class="info">
-                <h3 class="tagline">{{movie.tagline}}</h3>
-                <h3>Översikt</h3>
-                <p>{{movie.overview}}</p>
+                <h3 *ngIf="movie.tagline" class="tagline">{{movie.tagline}}</h3>
+                <ng-container *ngIf="movie.overview">
+                    <h3>Översikt</h3>
+                    <p>{{movie.overview}}</p>
+                </ng-container>
             </div>
             <div>
                 <button type="button" class="back-button" (click)="goBack()">Tillbaka</button>

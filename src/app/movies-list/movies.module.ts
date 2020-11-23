@@ -15,6 +15,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { LoadingComponent } from '../loading/loading/loading.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { LoadingComponent } from '../loading/loading/loading.component';
         MatDividerModule,
         MatTabsModule,
         MatBadgeModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatInputModule
     ],
     providers: [MoviesService, FormBuilder]
 })

@@ -24,4 +24,14 @@ export class MoviesService {
         shareReplay()
       );
   }
+
+  searchMovie(searchString: string) {
+    if (searchString !== null) {
+      const encodedString = encodeURI(searchString);
+      return this.http.get<Movie[]>(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodedString}&page=1`)
+        .pipe(
+          shareReplay()
+        );
+    }
+  }
 }

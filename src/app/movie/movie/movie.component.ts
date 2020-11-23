@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
 import { Movie } from './../../movies-list/model/movie';
 
@@ -12,6 +11,7 @@ import { Movie } from './../../movies-list/model/movie';
 })
 export class MovieComponent implements OnInit {
   movie$: Observable<Movie>
+
   constructor(
     private moviesService: MoviesService,
     private route: ActivatedRoute,
@@ -19,12 +19,8 @@ export class MovieComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const movieId = parseInt(this.route.snapshot.paramMap.get("movieId"));
-
-    this.movie$ = this.moviesService.loadMovieById(movieId)
-      .pipe(
-        tap((res) => console.log(res))
-      );
+    const movieId = +this.route.snapshot.paramMap.get("movieId");
+    this.movie$ = this.moviesService.loadMovieById(movieId);
   }
 
   runtime(time: number) {
@@ -35,7 +31,8 @@ export class MovieComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    const category = this.route.snapshot.paramMap.get("category");
+    this.router.navigate(['movies', category]);
   }
 
 }

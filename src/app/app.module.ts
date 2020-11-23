@@ -10,6 +10,7 @@ import { MoviesService } from './movies-list/services/movies.services';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,

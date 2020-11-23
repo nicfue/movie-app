@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { shareReplay, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category';
-import { CategoryViewValue } from 'src/app/movies-list/model/category-view-value';
 import { FilterOption } from 'src/app/movies-list/model/filter-option';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
-import { Filter } from '../../movies-list/model/filter';
 import { CategoryOption } from './../../movies-list/model/category-option';
+import { CategoryViewValue } from './../../movies-list/model/category-view-value';
+import { Filter } from './../../movies-list/model/filter';
 import { Movie } from './../../movies-list/model/movie';
 
 @Component({
@@ -18,9 +18,11 @@ import { Movie } from './../../movies-list/model/movie';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  moviesSubject = new BehaviorSubject<Movie[]>([]);
-  movies$: Observable<Movie[]> = this.moviesSubject.asObservable();
+  movies$: Observable<Movie[]>;
   movies: Movie[];
+  selectedCategory: string;
+  showEmptyState = false;
+  submitted = false;
 
   filterOptions: FilterOption[] = [
     { value: Filter.POPULAR_DESC },
@@ -43,19 +45,22 @@ export class HomeComponent implements OnInit {
   constructor(
     private moviesService: MoviesService,
     private loadingService: LoadingService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit(): void {
-    const moviesData$ = this.moviesService.loadMovies(Category.POPULAR).pipe(
-      tap(movies => {
-        this.movies = movies['results'],
-          this.sortByPopularityAndVote(Filter.POPULAR_DESC, 'popularity');
-      })
-    );
-    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$);
+    const category = this.route.snapshot.paramMap.get("category");
+    const moviesData$ = this.moviesService.loadMovies(category);
+    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$)
+      .pipe(
+        tap(res => {
+          this.movies = res['results'];
+        })
+      );
+    this.convertToViewValue(category);
   }
 
   changeFilterOption(selected: MatTabChangeEvent) {
@@ -103,13 +108,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  changeMovieCategory(movieCategory: MatTabChangeEvent) {
-    const selectedOption = movieCategory.tab.textLabel;
-    this.getMovieCategory(selectedOption);
-  }
-
-  getMovieCategory(selectedOption: string) {
-    let category = '';
+  changeCategory(selectedOption: string) {
+    let category;
     if (selectedOption == CategoryViewValue.POPULAR_VIEW_VALUE) {
       category = Category.POPULAR;
     } else if (selectedOption == CategoryViewValue.UPCOMING_VIEW_VALUE) {
@@ -119,13 +119,35 @@ export class HomeComponent implements OnInit {
     } else {
       category = Category.TOP_RATED;
     }
+    this.selectedCategory = selectedOption;
     const moviesData$ = this.moviesService.loadMovies(category)
+    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$)
       .pipe(
-        tap(movies => this.movies = movies['results'])
-      )
-    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$);
-    this.router.navigate(['movies/' + category]);
+        tap(movies => this.movies = movies['results']),
+        shareReplay()
+      );
+    this.router.navigate(['movies', category]);
+  }
 
+  convertToViewValue(category: string) {
+    if (category == Category.POPULAR) {
+      this.selectedCategory = CategoryViewValue.POPULAR_VIEW_VALUE;
+    } else if (category == Category.UPCOMING) {
+      this.selectedCategory = CategoryViewValue.UPCOMING_VIEW_VALUE;
+    } else if (category == Category.NOW_PLAYING) {
+      this.selectedCategory = CategoryViewValue.NOW_PLAYING_VIEW_VALUE;
+    } else {
+      this.selectedCategory = CategoryViewValue.TOP_RATED_VIEW_VALUE
+    }
+  }
+
+  searchMovie(searchString: string) {
+    this.submitted = true;
+    if (searchString === '') {
+      this.showEmptyState = true;
+      return;
+    }
+    this.movies$ = this.moviesService.searchMovie(searchString);
+    this.submitted = false;
   }
 }
-
