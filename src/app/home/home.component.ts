@@ -7,10 +7,10 @@ import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category';
 import { FilterOption } from 'src/app/movies-list/model/filter-option';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
-import { CategoryOption } from './../../movies-list/model/category-option';
-import { CategoryViewValue } from './../../movies-list/model/category-view-value';
-import { Filter } from './../../movies-list/model/filter';
-import { Movie } from './../../movies-list/model/movie';
+import { CategoryOption } from '../movies-list/model/category-option';
+import { CategoryViewValue } from '../movies-list/model/category-view-value';
+import { Filter } from '../movies-list/model/filter';
+import { Movie } from '../movies-list/model/movie';
 
 @Component({
   selector: 'app-home',

@@ -15,7 +15,7 @@
         <div class="action-container">
             <input matInput type="text" #searchInput [value]="searchInput.value">
             <button class="search-movie" type="button" (click)="searchMovie(searchInput.value)">Sök</button>
-            <button type="button" (click)="submitted = false || searchInput.value = ''">Rensa</button>
+            <button type="button" (click)="searchInput.value = ''">Rensa</button>
         </div>
     </mat-form-field>
     <ng-container *ngIf="submitted && searchInput.value == ''">
