@@ -1,8 +1,7 @@
-import { Genre } from '../model/genre';
-import { Movie } from './../model/movie';
-import { tap, map, shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, shareReplay, tap } from 'rxjs/operators';
+import { Movie } from './../model/movie';
 
 let API_KEY = '256af02e76ba7bbeb28d35166f86fc67';
 @Injectable()
@@ -34,12 +33,5 @@ export class MoviesService {
           shareReplay()
         );
     }
-  }
-
-  getGenres() {
-    return this.http.get<Genre[]>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`)
-    .pipe(
-      shareReplay()
-    )
   }
 }

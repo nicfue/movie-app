@@ -11,7 +11,6 @@ import { CategoryViewValue } from '../movies-list/model/category-view-value';
 import { Filter } from '../movies-list/model/filter';
 import { Movie } from '../movies-list/model/movie';
 import { MovieCategories } from '../movies-list/model/movie-categories';
-import { Genre } from './../movies-list/model/genre';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +25,6 @@ export class HomeComponent implements OnInit {
   submitted = false;
   filterOptions = FilterOptions;
   movieCategories = MovieCategories;
-  genresList$: Observable<Genre[]>;
-  genres: Genre[];
 
   constructor(
     private moviesService: MoviesService,
