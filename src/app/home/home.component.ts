@@ -150,4 +150,9 @@ export class HomeComponent implements OnInit {
     this.movies$ = this.moviesService.searchMovie(searchString);
     this.submitted = false;
   }
+
+  clearInput(text: string) {
+    text['value'] = '';
+    this.submitted = false;
+  }
 }
