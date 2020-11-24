@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category';
-import { FilterOption } from 'src/app/movies-list/model/filter-option';
+import { FilterOptions } from 'src/app/movies-list/model/filter-options';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
-import { CategoryOption } from '../movies-list/model/category-option';
 import { CategoryViewValue } from '../movies-list/model/category-view-value';
 import { Filter } from '../movies-list/model/filter';
 import { Movie } from '../movies-list/model/movie';
+import { MovieCategories } from '../movies-list/model/movie-categories';
 
 @Component({
   selector: 'app-home',
@@ -23,24 +23,8 @@ export class HomeComponent implements OnInit {
   selectedCategory: string;
   showEmptyState = false;
   submitted = false;
-
-  filterOptions: FilterOption[] = [
-    { value: Filter.POPULAR_DESC },
-    { value: Filter.POPULAR_ASC },
-    { value: Filter.VOTE_DESC },
-    { value: Filter.VOTE_ASC },
-    { value: Filter.RELEASE_DATE_DESC },
-    { value: Filter.RELEASE_DATE_ASC },
-    { value: Filter.TITLE_DESC },
-    { value: Filter.TITLE_ASC }
-  ];
-
-  movieCategories: CategoryOption[] = [
-    { value: Category.POPULAR, viewValue: CategoryViewValue.POPULAR_VIEW_VALUE },
-    { value: Category.UPCOMING, viewValue: CategoryViewValue.UPCOMING_VIEW_VALUE },
-    { value: Category.NOW_PLAYING, viewValue: CategoryViewValue.NOW_PLAYING_VIEW_VALUE },
-    { value: Category.TOP_RATED, viewValue: CategoryViewValue.TOP_RATED_VIEW_VALUE },
-  ]
+  filterOptions = FilterOptions;
+  movieCategories = MovieCategories;
 
   constructor(
     private moviesService: MoviesService,
