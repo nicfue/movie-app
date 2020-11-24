@@ -1,4 +1,4 @@
-import { Genres } from './genres';
+import { Genre } from './genre';
 export interface Movie {
     id: number;
     original_title: string;
@@ -10,7 +10,7 @@ export interface Movie {
     vote_average: number;
     runtime: number;
     tagline: string;
-    genres: Array<Genres>;
+    genres: Genre[];
     backdrop_path: string;
 }
 

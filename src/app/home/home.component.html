@@ -17,6 +17,7 @@
             <button class="search-movie" type="button" (click)="searchMovie(searchInput.value)">Sök</button>
             <button type="button" (click)="clearInput(searchInput)">Rensa</button>
         </div>
+        <p *ngIf="submitted && searchInput.value == ''" class="empty-state">Ange en titel</p>
     </mat-form-field>
     <ng-container *ngIf="submitted && searchInput.value == ''">
         <p class="empty-state">Ange en titel</p>

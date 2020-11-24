@@ -1,4 +1,4 @@
-import { Genres } from './../model/genres';
+import { Genre } from '../model/genre';
 import { Movie } from './../model/movie';
 import { tap, map, shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -37,7 +37,7 @@ export class MoviesService {
   }
 
   getGenres() {
-    return this.http.get<Genres[]>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`)
+    return this.http.get<Genre[]>(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`)
     .pipe(
       shareReplay()
     )

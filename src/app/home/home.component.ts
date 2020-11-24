@@ -11,6 +11,7 @@ import { CategoryViewValue } from '../movies-list/model/category-view-value';
 import { Filter } from '../movies-list/model/filter';
 import { Movie } from '../movies-list/model/movie';
 import { MovieCategories } from '../movies-list/model/movie-categories';
+import { Genre } from './../movies-list/model/genre';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,8 @@ export class HomeComponent implements OnInit {
   submitted = false;
   filterOptions = FilterOptions;
   movieCategories = MovieCategories;
+  genresList$: Observable<Genre[]>;
+  genres: Genre[];
 
   constructor(
     private moviesService: MoviesService,
@@ -63,9 +66,9 @@ export class HomeComponent implements OnInit {
   sortByPopularityAndVote(selectionOption, sortingOption) {
     this.movies.sort((a, b) => {
       if (selectionOption.includes('fallande')) {
-        return (a[sortingOption] > b[sortingOption]) ? -1 : 0
+        return a[sortingOption] > b[sortingOption] ? -1 : 0
       } else {
-        return (b[sortingOption] > a[sortingOption]) ? -1 : 0
+        return b[sortingOption] > a[sortingOption] ? -1 : 0
       }
     });
   }
@@ -73,9 +76,9 @@ export class HomeComponent implements OnInit {
   sortByTitle(selectionOption, sortingOption) {
     this.movies.sort((a, b) => {
       if (selectionOption.includes('Ö-A')) {
-        return (a[sortingOption] > b[sortingOption]) ? -1 : 0
+        return a[sortingOption] > b[sortingOption] ? -1 : 0
       } else {
-        return (b[sortingOption] > a[sortingOption]) ? -1 : 0
+        return b[sortingOption] > a[sortingOption] ? -1 : 0
       }
     });
   }
