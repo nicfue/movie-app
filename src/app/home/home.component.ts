@@ -138,7 +138,8 @@ export class HomeComponent implements OnInit {
     } else {
       this.movies$ = this.moviesService.searchMovie(searchString)
         .pipe(
-          delay(500)
+          delay(500),
+          tap(movies => this.movies = movies['results'])
         );
     }
   }
