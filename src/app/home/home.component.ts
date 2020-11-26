@@ -130,9 +130,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onSearch(event: Event) {
+  onSearch(searchString: string) {
     const category = this.route.snapshot.paramMap.get("category");
-    let searchString = (<HTMLInputElement>event.target).value;
     if (searchString == '') {
       this.getMovies(category);
     } else {

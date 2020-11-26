@@ -15,7 +15,7 @@
     <mat-form-field>
         <ng-container>
             <mat-label>Sök film</mat-label>
-            <input matInput type="text" autofocus [(ngModel)]="searchString" (input)="onSearch($event)">
+            <input matInput type="text" autofocus [(ngModel)]="searchString" (input)="onSearch(searchString)">
         </ng-container>
     </mat-form-field>
     <movies-list [movies]="movies$ | async"></movies-list>
