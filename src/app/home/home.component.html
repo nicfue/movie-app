@@ -1,23 +1,22 @@
 <div class="header-container">
-    <h3>Sortera</h3>
+    <mat-label>Sortera</mat-label>
     <mat-tab-group (selectedTabChange)="changeFilterOption($event)">
         <mat-tab *ngFor="let filterOption of filterOptions" [label]="filterOption.value">{{filterOption.value}}
         </mat-tab>
     </mat-tab-group>
-    <h3>Välj kategori</h3>
+    <hr>
+    <mat-label>Välj kategori</mat-label>
     <mat-tab-group (selectedTabChange)="changeCategory($event.tab.textLabel)">
         <mat-tab *ngFor="let movieCategory of movieCategories" [label]="movieCategory.viewValue">
             {{selectedCategory}}
         </mat-tab>
     </mat-tab-group>
-    <mat-form-field class="search-field">
-        <p>Sök film</p>
-        <div class="action-container">
-            <input matInput type="text" #searchInput [value]="searchInput.value">
-            <button class="search-movie" type="button" (click)="searchMovie(searchInput.value)">Sök</button>
-            <button type="button" (click)="clearInput(searchInput)">Rensa</button>
-        </div>
-        <p *ngIf="submitted && searchInput.value == ''" class="empty-state">Ange en titel</p>
+    <hr>
+    <mat-form-field>
+        <ng-container>
+            <mat-label>Sök film</mat-label>
+            <input matInput type="text" autofocus [(ngModel)]="searchString" (input)="onSearch($event)">
+        </ng-container>
     </mat-form-field>
     <movies-list [movies]="movies$ | async"></movies-list>
 </div>

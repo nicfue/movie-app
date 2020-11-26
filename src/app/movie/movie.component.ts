@@ -31,7 +31,6 @@ export class MovieComponent implements OnInit {
   }
 
   goBack() {
-    const category = this.route.snapshot.paramMap.get("category");
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { delay, shareReplay, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category';
 import { FilterOptions } from 'src/app/movies-list/model/filter-options';
@@ -15,16 +15,22 @@ import { MovieCategories } from '../movies-list/model/movie-categories';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styles: [`
+  div {
+    margin: 30px;
+  }
+  input {
+    background-color: lightsteelblue;
+  }
+  `]
 })
 export class HomeComponent implements OnInit {
   movies$: Observable<Movie[]>;
   movies: Movie[];
   selectedCategory: string;
-  showEmptyState = false;
-  submitted = false;
   filterOptions = FilterOptions;
   movieCategories = MovieCategories;
+  searchString: string;
 
   constructor(
     private moviesService: MoviesService,
@@ -37,14 +43,17 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     const category = this.route.snapshot.paramMap.get("category");
-    const moviesData$ = this.moviesService.loadMovies(category);
+    this.getMovies(category);
+    this.convertToViewValue(category);
+  }
+
+  getMovies(category) {
+    const moviesData$ = this.moviesService.loadMovies(category)
     this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$)
       .pipe(
-        tap(res => {
-          this.movies = res['results'];
-        })
+        tap(movies => this.movies = movies['results']),
+        shareReplay()
       );
-    this.convertToViewValue(category);
   }
 
   changeFilterOption(selected: MatTabChangeEvent) {
@@ -93,6 +102,7 @@ export class HomeComponent implements OnInit {
   }
 
   changeCategory(selectedOption: string) {
+    this.searchString = '';
     let category;
     if (selectedOption == CategoryViewValue.POPULAR_VIEW_VALUE) {
       category = Category.POPULAR;
@@ -104,12 +114,7 @@ export class HomeComponent implements OnInit {
       category = Category.TOP_RATED;
     }
     this.selectedCategory = selectedOption;
-    const moviesData$ = this.moviesService.loadMovies(category)
-    this.movies$ = this.loadingService.showLoaderUntilCompleted(moviesData$)
-      .pipe(
-        tap(movies => this.movies = movies['results']),
-        shareReplay()
-      );
+    this.getMovies(category)
     this.router.navigate(['movies', category]);
   }
 
@@ -125,18 +130,17 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  searchMovie(searchString: string) {
-    this.submitted = true;
-    if (searchString === '') {
-      this.showEmptyState = true;
-      return;
+  onSearch(event: Event) {
+    const category = this.route.snapshot.paramMap.get("category");
+    let searchString = (<HTMLInputElement>event.target).value;
+    if (searchString == '') {
+      this.getMovies(category);
+    } else {
+      this.movies$ = this.moviesService.searchMovie(searchString)
+        .pipe(
+          delay(500)
+        );
     }
-    this.movies$ = this.moviesService.searchMovie(searchString);
-    this.submitted = false;
   }
 
-  clearInput(text: string) {
-    text['value'] = '';
-    this.submitted = false;
-  }
 }
