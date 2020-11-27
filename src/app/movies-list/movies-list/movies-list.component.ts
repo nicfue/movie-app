@@ -12,5 +12,8 @@ export class MoviesListComponent  {
 
   constructor() { }
 
+  getPoster(movie: Movie) {
+  return movie.poster_path !== null ? 'https://image.tmdb.org/t/p/w500/' + movie.poster_path : 'no_image_placeholder.jpg';
+  }
 
 }

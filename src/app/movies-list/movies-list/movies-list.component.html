@@ -1,7 +1,7 @@
 <ng-container *ngIf="movies">
     <mat-grid-list cols="5" rowHeight="175px" gutterSize="5px">
-        <mat-grid-tile *ngFor="let movie of movies['results']" [colspan]="'1'" [rowspan]="'2.5'">
-            <img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" [queryParams]="{title: movie.title}" [routerLink]="[movie.id]">
+        <mat-grid-tile class="poster-container" *ngFor="let movie of movies['results']" [colspan]="1" [rowspan]="2.5" [queryParams]="{title: movie.title}" [routerLink]="[movie.id]">
+            <img [src]="getPoster(movie)">
             <mat-grid-tile-footer style="display: block">
                 <h3>{{movie.title}}</h3>
                 <p>{{movie.release_date | date:'d MMMM y'}}</p>

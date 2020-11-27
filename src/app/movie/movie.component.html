@@ -1,7 +1,5 @@
 <div class="movie-container" *ngIf="movie$ | async as movie">
-    <div class="poster">
-        <img [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path">
-    </div>
+    <img [src]="getPoster(movie)">
     <div class="detail-container">
         <div class="detail">
             <div class="title">

@@ -1,5 +1,14 @@
+.poster-container {
+    cursor: pointer;
+}
+
 img {
     width: 280px;
+    transition: transform .1s;
+}
+
+img:hover {
+    transform: scale(1.01);
 }
 
 .badge {

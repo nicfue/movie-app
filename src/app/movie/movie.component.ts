@@ -23,6 +23,10 @@ export class MovieComponent implements OnInit {
     this.movie$ = this.moviesService.loadMovieById(movieId);
   }
 
+  getPoster(movie: Movie) {
+    return movie.poster_path !== null ? 'https://image.tmdb.org/t/p/w500/' + movie.poster_path : 'no_image_placeholder.jpg';
+  }
+
   runtime(time: number) {
     let hours = time / 60,
       getHours = Math.floor(hours),

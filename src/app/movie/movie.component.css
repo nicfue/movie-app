@@ -8,7 +8,9 @@
     display: flex;
 }
 
-.poster {
+img {
+    width: 500px;
+    height: 750px;
     padding-left: 30px;
 }
 
