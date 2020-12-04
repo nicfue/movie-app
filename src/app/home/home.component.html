@@ -1,7 +1,7 @@
 <div class="header-container">
     <mat-label>Sortera</mat-label>
-    <mat-tab-group (selectedTabChange)="changeFilterOption($event)">
-        <mat-tab *ngFor="let filterOption of filterOptions" [label]="filterOption.value">{{filterOption.value}}
+    <mat-tab-group (selectedTabChange)="changeSorting($event)">
+        <mat-tab *ngFor="let sortCategory of sortCategories" [label]="sortCategory.value">{{sortCategory.value}}
         </mat-tab>
     </mat-tab-group>
     <hr>

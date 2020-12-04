@@ -1,4 +1,4 @@
-export enum Filter {
+export enum SortCategory {
     POPULAR_DESC = 'Popularitet fallande',
     POPULAR_ASC = 'Popularitet stigande',
     VOTE_DESC = 'Betyg fallande',

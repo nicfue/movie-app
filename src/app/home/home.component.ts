@@ -4,13 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { delay, shareReplay, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/loading/loading.service';
-import { Category } from 'src/app/movies-list/model/category';
-import { FilterOptions } from 'src/app/movies-list/model/filter-options';
+import { Category } from 'src/app/movies-list/model/category.model';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
-import { CategoryViewValue } from '../movies-list/model/category-view-value';
-import { Filter } from '../movies-list/model/filter';
-import { Movie } from '../movies-list/model/movie';
-import { MovieCategories } from '../movies-list/model/movie-categories';
+import { CategoryViewValue } from '../movies-list/model/category-view-value.model';
+import { Movie } from '../movies-list/model/movie.model';
+import { SortCategory } from '../movies-list/model/sort-category.model';
 
 @Component({
   selector: 'app-home',
@@ -28,8 +26,8 @@ export class HomeComponent implements OnInit {
   movies$: Observable<Movie[]>;
   movies: Movie[];
   selectedCategory: string;
-  filterOptions = FilterOptions;
-  movieCategories = MovieCategories;
+  sortCategories: { value: string }[] = [];
+  movieCategories: { value: string, viewValue: string }[] = [];
   searchString: string;
 
   constructor(
@@ -42,6 +40,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sortCategories = this.moviesService.sortCategories;
+    this.movieCategories = this.moviesService.movieCategories;
     const category = this.route.snapshot.paramMap.get("category");
     this.getMovies(category);
     this.convertToViewValue(category);
@@ -56,44 +56,44 @@ export class HomeComponent implements OnInit {
       );
   }
 
-  changeFilterOption(selected: MatTabChangeEvent) {
-    const selectedOption = selected.tab.textLabel;
-    if (selectedOption == Filter.POPULAR_DESC || selectedOption == Filter.POPULAR_ASC) {
-      this.sortByPopularityAndVote(selectedOption, 'popularity');
-    } else if (selectedOption === Filter.VOTE_DESC || selectedOption == Filter.VOTE_ASC) {
-      this.sortByPopularityAndVote(selectedOption, 'vote_average')
-    } else if (selectedOption == Filter.TITLE_DESC || selectedOption == Filter.TITLE_ASC) {
-      this.sortByTitle(selectedOption, 'title');
+  changeSorting(sort: MatTabChangeEvent) {
+    const sortCategory = sort.tab.textLabel;
+    if (sortCategory == SortCategory.POPULAR_DESC || sortCategory == SortCategory.POPULAR_ASC) {
+      this.sortByPopularityAndVote(sortCategory, 'popularity');
+    } else if (sortCategory === SortCategory.VOTE_DESC || sortCategory == SortCategory.VOTE_ASC) {
+      this.sortByPopularityAndVote(sortCategory, 'vote_average')
+    } else if (sortCategory == SortCategory.TITLE_DESC || sortCategory == SortCategory.TITLE_ASC) {
+      this.sortByTitle(sortCategory, 'title');
     } else {
-      this.sortByReleaseDate(selectedOption);
+      this.sortByReleaseDate(sortCategory);
     }
   }
 
-  sortByPopularityAndVote(selectionOption, sortingOption) {
+  sortByPopularityAndVote(sortCategory, selected) {
     this.movies.sort((a, b) => {
-      if (selectionOption.includes('fallande')) {
-        return a[sortingOption] > b[sortingOption] ? -1 : 0
+      if (sortCategory.includes('fallande')) {
+        return a[selected] > b[selected] ? -1 : 0
       } else {
-        return b[sortingOption] > a[sortingOption] ? -1 : 0
+        return b[selected] > a[selected] ? -1 : 0
       }
     });
   }
 
-  sortByTitle(selectionOption, sortingOption) {
+  sortByTitle(sortCategory, selected) {
     this.movies.sort((a, b) => {
-      if (selectionOption.includes('Ö-A')) {
-        return a[sortingOption] > b[sortingOption] ? -1 : 0
+      if (sortCategory.includes('Ö-A')) {
+        return a[selected] > b[selected] ? -1 : 0
       } else {
-        return b[sortingOption] > a[sortingOption] ? -1 : 0
+        return b[selected] > a[selected] ? -1 : 0
       }
     });
   }
 
-  sortByReleaseDate(selectionOption) {
+  sortByReleaseDate(sortCategory) {
     this.movies.sort((a, b) => {
       let convertedDateA = Date.parse(a.release_date)
       let convertedDateB = Date.parse(b.release_date)
-      if (selectionOption.includes('fallande')) {
+      if (sortCategory.includes('fallande')) {
         return convertedDateA > convertedDateB ? -1 : 0;
       } else {
         return convertedDateB > convertedDateA ? -1 : 0;
@@ -101,19 +101,19 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  changeCategory(selectedOption: string) {
+  changeCategory(selected: string) {
     this.searchString = '';
     let category;
-    if (selectedOption == CategoryViewValue.POPULAR_VIEW_VALUE) {
+    if (selected == CategoryViewValue.POPULAR_VIEW_VALUE) {
       category = Category.POPULAR;
-    } else if (selectedOption == CategoryViewValue.UPCOMING_VIEW_VALUE) {
+    } else if (selected == CategoryViewValue.UPCOMING_VIEW_VALUE) {
       category = Category.UPCOMING;
-    } else if (selectedOption == CategoryViewValue.NOW_PLAYING_VIEW_VALUE) {
+    } else if (selected == CategoryViewValue.NOW_PLAYING_VIEW_VALUE) {
       category = Category.NOW_PLAYING;
     } else {
       category = Category.TOP_RATED;
     }
-    this.selectedCategory = selectedOption;
+    this.selectedCategory = selected;
     this.getMovies(category)
     this.router.navigate(['movies', category]);
   }
