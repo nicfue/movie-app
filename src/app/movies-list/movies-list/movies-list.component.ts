@@ -24,10 +24,10 @@ export class MoviesListComponent implements OnInit, OnDestroy {
   }
 
   getInitState() {
-    this.errorStateConfig = new StateConfig(State.MOVIES, false)
     this.errorStateSub = this.moviesService.error
-      .subscribe(error => {
-        if (error) {
+      .subscribe(errorResponse => {
+        if (errorResponse) {
+          this.errorStateConfig = new StateConfig(State.MOVIES, false)
           this.errorStateConfig.error = true;
         }
       });

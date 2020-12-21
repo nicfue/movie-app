@@ -7,7 +7,7 @@ import { Category } from '../model/category.model';
 import { Movie } from '../model/movie.model';
 import { SortType } from '../model/sort-type.model';
 
-let API_KEY = '256af02e76ba7bbeb28d35166f86fc67x';
+let API_KEY = '256af02e76ba7bbeb28d35166f86fc67';
 @Injectable()
 export class MoviesService {
   error = new Subject<string>();
