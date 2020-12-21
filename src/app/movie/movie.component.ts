@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
 import { Movie } from '../movies-list/model/movie.model';
+import { StateConfig } from '../movies-list/model/state-config.modal';
+import { State } from '../movies-list/model/state.model';
 
 @Component({
   selector: 'app-movie',
@@ -11,8 +13,8 @@ import { Movie } from '../movies-list/model/movie.model';
 })
 export class MovieComponent implements OnInit, OnDestroy {
   movie$: Observable<Movie>
-  error = null;
-  errorSub: Subscription;
+  errorStateConfig: StateConfig;
+  errorStateSub: Subscription;
 
   constructor(
     private moviesService: MoviesService,
@@ -27,10 +29,15 @@ export class MovieComponent implements OnInit, OnDestroy {
 
   getMovie(id: number) {
     this.movie$ = this.moviesService.loadMovieById(id);
-    this.errorSub = this.moviesService.error
-      .subscribe(error => {
-        if (error) {
-          this.error = true;
+    this.getErrorState();
+  }
+
+  getErrorState() {
+    this.errorStateSub = this.moviesService.error
+      .subscribe(errorResponse => {
+        if (errorResponse) {
+          this.errorStateConfig = new StateConfig(State.MOVIE, false)
+          this.errorStateConfig.error = true;
         }
       });
   }
@@ -51,7 +58,7 @@ export class MovieComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.errorSub.unsubscribe();
+    this.errorStateSub.unsubscribe();
   }
 
 }

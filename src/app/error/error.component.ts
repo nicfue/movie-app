@@ -1,11 +1,13 @@
 import { Component, Input } from "@angular/core";
+import { StateConfig } from "../movies-list/model/state-config.modal";
+
 
 @Component({
 	selector: 'app-error',
 	template: `
-	 <div class="error" *ngIf="showError">
+	 <div class="error" *ngIf="errorState">
         <h3>Ett fel har inträffat</h3>
-				<p>Ingen film kunde visas!</p>
+				<p>{{errorState.state == 'MOVIES' ? 'Inga filmer kan visas!' : 'Ingen film kan visas!'}}</p>
     </div>
 	`,
 	styles: [`
@@ -16,5 +18,6 @@ import { Component, Input } from "@angular/core";
 
 })
 export class ErrorComponent {
-	@Input() showError: boolean;
+	@Input() errorState: StateConfig;
+
 }

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, shareReplay, tap, catchError } from 'rxjs/operators';
-import { Category } from '../model/category.model';
+import { Subject, throwError } from 'rxjs';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { CategoryViewValue } from '../model/category-view-value.model';
+import { Category } from '../model/category.model';
 import { Movie } from '../model/movie.model';
 import { SortType } from '../model/sort-type.model';
-import { Subject, throwError } from 'rxjs';
 
-let API_KEY = '256af02e76ba7bbeb28d35166f86fc67';
+let API_KEY = '256af02e76ba7bbeb28d35166f86fc67x';
 @Injectable()
 export class MoviesService {
   error = new Subject<string>();

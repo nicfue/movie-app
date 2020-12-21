@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription, throwError } from 'rxjs';
-import { delay, shareReplay, tap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { delay, shareReplay, tap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/loading/loading.service';
 import { Category } from 'src/app/movies-list/model/category.model';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
@@ -20,20 +20,16 @@ import { SortType } from '../movies-list/model/sort-type.model';
   input {
     background-color: lightsteelblue;
   }
-  div.error {
-    color: red;
-  }
   `]
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
   movies$: Observable<Movie[]>;
   movies: Movie[];
   selectedCategory: string;
   sortTypes: { value: string }[] = [];
   movieCategories: { value: string, viewValue: string }[] = [];
   searchString: string;
-  error = false;
-  errorSub: Subscription;
+
 
   constructor(
     private moviesService: MoviesService,
@@ -68,12 +64,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         tap(movies => this.movies = movies['results']),
         shareReplay()
       );
-    this.errorSub = this.moviesService.error
-      .subscribe(error => {
-        if (error) {
-          this.error = true;
-        }
-      });
   }
 
   changeSortType(sort: MatTabChangeEvent) {
@@ -149,10 +139,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           tap(movies => this.movies = movies['results'])
         );
     }
-  }
-
-  ngOnDestroy() {
-    this.errorSub.unsubscribe();
   }
 
 }
