@@ -19,4 +19,8 @@
         </ng-container>
     </mat-form-field>
     <movies-list [movies]="movies$ | async"></movies-list>
+    <div class="error" *ngIf="error">
+        <h3>Ett fel har inträffat</h3>
+        <p>Inga filmer kunde visas!</p>
+    </div>
 </div>
