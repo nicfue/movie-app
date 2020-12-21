@@ -8,7 +8,7 @@ import { Category } from 'src/app/movies-list/model/category.model';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
 import { CategoryViewValue } from '../movies-list/model/category-view-value.model';
 import { Movie } from '../movies-list/model/movie.model';
-import { SortCategory } from '../movies-list/model/sort-category.model';
+import { SortType } from '../movies-list/model/sort-type.model';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   movies$: Observable<Movie[]>;
   movies: Movie[];
   selectedCategory: string;
-  sortCategories: { value: string }[] = [];
+  sortTypes: { value: string }[] = [];
   movieCategories: { value: string, viewValue: string }[] = [];
   searchString: string;
 
@@ -40,11 +40,20 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sortCategories = this.moviesService.sortCategories;
-    this.movieCategories = this.moviesService.movieCategories;
     const category = this.route.snapshot.paramMap.get("category");
+    this.getSortTypes();
+    this.getMovieCategories();
     this.getMovies(category);
-    this.convertToViewValue(category);
+  }
+
+  getSortTypes() {
+    this.sortTypes = this.moviesService.sortTypes.map(category => {
+      return { value: category }
+    });
+  }
+
+  getMovieCategories() {
+    this.movieCategories = this.moviesService.movieCategories;
   }
 
   getMovies(category) {
@@ -56,22 +65,22 @@ export class HomeComponent implements OnInit {
       );
   }
 
-  changeSorting(sort: MatTabChangeEvent) {
-    const sortCategory = sort.tab.textLabel;
-    if (sortCategory == SortCategory.POPULAR_DESC || sortCategory == SortCategory.POPULAR_ASC) {
-      this.sortByPopularityAndVote(sortCategory, 'popularity');
-    } else if (sortCategory === SortCategory.VOTE_DESC || sortCategory == SortCategory.VOTE_ASC) {
-      this.sortByPopularityAndVote(sortCategory, 'vote_average')
-    } else if (sortCategory == SortCategory.TITLE_DESC || sortCategory == SortCategory.TITLE_ASC) {
-      this.sortByTitle(sortCategory, 'title');
+  changeSortType(sort: MatTabChangeEvent) {
+    const sortType = sort.tab.textLabel;
+    if (sortType == SortType.POPULAR_DESC || sortType == SortType.POPULAR_ASC) {
+      this.sortByPopularityAndVote(sortType, 'popularity');
+    } else if (sortType === SortType.VOTE_DESC || sortType == SortType.VOTE_ASC) {
+      this.sortByPopularityAndVote(sortType, 'vote_average')
+    } else if (sortType == SortType.TITLE_DESC || sortType == SortType.TITLE_ASC) {
+      this.sortByTitle(sortType, 'title');
     } else {
-      this.sortByReleaseDate(sortCategory);
+      this.sortByReleaseDate(sortType);
     }
   }
 
-  sortByPopularityAndVote(sortCategory, selected) {
+  sortByPopularityAndVote(sortType, selected) {
     this.movies.sort((a, b) => {
-      if (sortCategory.includes('fallande')) {
+      if (sortType.includes('fallande')) {
         return a[selected] > b[selected] ? -1 : 0
       } else {
         return b[selected] > a[selected] ? -1 : 0
@@ -79,9 +88,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  sortByTitle(sortCategory, selected) {
+  sortByTitle(sortType, selected) {
     this.movies.sort((a, b) => {
-      if (sortCategory.includes('Ö-A')) {
+      if (sortType.includes('Ö-A')) {
         return a[selected] > b[selected] ? -1 : 0
       } else {
         return b[selected] > a[selected] ? -1 : 0
@@ -89,11 +98,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  sortByReleaseDate(sortCategory) {
+  sortByReleaseDate(sortType) {
     this.movies.sort((a, b) => {
       let convertedDateA = Date.parse(a.release_date)
       let convertedDateB = Date.parse(b.release_date)
-      if (sortCategory.includes('fallande')) {
+      if (sortType.includes('fallande')) {
         return convertedDateA > convertedDateB ? -1 : 0;
       } else {
         return convertedDateB > convertedDateA ? -1 : 0;
@@ -116,18 +125,6 @@ export class HomeComponent implements OnInit {
     this.selectedCategory = selected;
     this.getMovies(category)
     this.router.navigate(['movies', category]);
-  }
-
-  convertToViewValue(category: string) {
-    if (category == Category.POPULAR) {
-      this.selectedCategory = CategoryViewValue.POPULAR_VIEW_VALUE;
-    } else if (category == Category.UPCOMING) {
-      this.selectedCategory = CategoryViewValue.UPCOMING_VIEW_VALUE;
-    } else if (category == Category.NOW_PLAYING) {
-      this.selectedCategory = CategoryViewValue.NOW_PLAYING_VIEW_VALUE;
-    } else {
-      this.selectedCategory = CategoryViewValue.TOP_RATED_VIEW_VALUE
-    }
   }
 
   onSearch(searchString: string) {

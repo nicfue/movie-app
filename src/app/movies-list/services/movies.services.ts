@@ -4,7 +4,7 @@ import { map, shareReplay, tap } from 'rxjs/operators';
 import { Category } from '../model/category.model';
 import { CategoryViewValue } from '../model/category-view-value.model';
 import { Movie } from '../model/movie.model';
-import { SortCategory } from '../model/sort-category.model';
+import { SortType } from '../model/sort-type.model';
 
 let API_KEY = '256af02e76ba7bbeb28d35166f86fc67';
 @Injectable()
@@ -19,15 +19,15 @@ export class MoviesService {
     { value: Category.TOP_RATED, viewValue: CategoryViewValue.TOP_RATED_VIEW_VALUE }
   ]
 
-  sortCategories = [
-    { value: SortCategory.POPULAR_DESC },
-    { value: SortCategory.POPULAR_ASC },
-    { value: SortCategory.VOTE_DESC },
-    { value: SortCategory.VOTE_ASC },
-    { value: SortCategory.RELEASE_DATE_DESC },
-    { value: SortCategory.RELEASE_DATE_ASC },
-    { value: SortCategory.TITLE_DESC },
-    { value: SortCategory.TITLE_ASC }
+  sortTypes = [
+    SortType.POPULAR_DESC,
+    SortType.POPULAR_ASC,
+    SortType.VOTE_DESC,
+    SortType.VOTE_ASC,
+    SortType.RELEASE_DATE_DESC,
+    SortType.RELEASE_DATE_ASC,
+    SortType.TITLE_DESC,
+    SortType.TITLE_ASC
   ];
 
   loadMovies(category) {
