@@ -47,7 +47,10 @@ export class MoviesService {
   loadMovieById(movieId: number) {
     return this.http.get<Movie>(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`)
       .pipe(
-        shareReplay()
+        shareReplay(),
+        catchError(error => {
+          return throwError(this.error.next(error));
+        })
       );
   }
 

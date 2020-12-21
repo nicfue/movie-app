@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MoviesService } from 'src/app/movies-list/services/movies.services';
 import { Movie } from '../movies-list/model/movie.model';
 
@@ -9,8 +9,10 @@ import { Movie } from '../movies-list/model/movie.model';
   templateUrl: './movie.component.html',
   styleUrls: ['./movie.component.css']
 })
-export class MovieComponent implements OnInit {
+export class MovieComponent implements OnInit, OnDestroy {
   movie$: Observable<Movie>
+  error = null;
+  errorSub: Subscription;
 
   constructor(
     private moviesService: MoviesService,
@@ -20,7 +22,17 @@ export class MovieComponent implements OnInit {
 
   ngOnInit(): void {
     const movieId = +this.route.snapshot.paramMap.get("movieId");
-    this.movie$ = this.moviesService.loadMovieById(movieId);
+    this.getMovie(movieId);
+  }
+
+  getMovie(id: number) {
+    this.movie$ = this.moviesService.loadMovieById(id);
+    this.errorSub = this.moviesService.error
+      .subscribe(error => {
+        if (error) {
+          this.error = true;
+        }
+      });
   }
 
   getPoster(movie: Movie) {
@@ -36,6 +48,10 @@ export class MovieComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  ngOnDestroy() {
+    this.errorSub.unsubscribe();
   }
 
 }

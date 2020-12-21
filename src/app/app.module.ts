@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MovieComponent } from './movie/movie.component';
+import { MoviesModule } from './movies-list/movies.module';
 import { MoviesService } from './movies-list/services/movies.services';
 
 
@@ -20,7 +21,8 @@ import { MoviesService } from './movies-list/services/movies.services';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MoviesModule
   ],
   providers: [MoviesService],
   bootstrap: [AppComponent]

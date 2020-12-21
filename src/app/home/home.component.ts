@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   sortTypes: { value: string }[] = [];
   movieCategories: { value: string, viewValue: string }[] = [];
   searchString: string;
-  error = null;
+  error = false;
   errorSub: Subscription;
 
   constructor(
@@ -70,7 +70,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
     this.errorSub = this.moviesService.error
       .subscribe(error => {
-        this.error = error;
+        if (error) {
+          this.error = true;
+        }
       });
   }
 
