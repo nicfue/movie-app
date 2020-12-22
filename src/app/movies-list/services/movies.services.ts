@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
-import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { catchError, map, shareReplay, tap } from 'rxjs/operators';
 import { CategoryViewValue } from '../model/category-view-value.model';
 import { Category } from '../model/category.model';
 import { Movie } from '../model/movie.model';
@@ -35,10 +35,9 @@ export class MoviesService {
   loadMovies(category) {
     return this.http.get<Movie[]>(`https://api.themoviedb.org/3/movie/${category}?api_key=${API_KEY}`)
       .pipe(
-        tap(res => {
-          res['results'];
-          console.log(res);
-        }),
+        tap(res => console.log(res['results']),
+          map(res => res['results'])
+        ),
         catchError(error => {
           return throwError(this.error.next(error));
         })

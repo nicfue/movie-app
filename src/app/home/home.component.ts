@@ -69,9 +69,9 @@ export class HomeComponent implements OnInit {
   changeSortType(sort: MatTabChangeEvent) {
     const sortType = sort.tab.textLabel;
     if (sortType == SortType.POPULAR_DESC || sortType == SortType.POPULAR_ASC) {
-      this.sortByPopularityOrVote(sortType, 'popularity');
+      this.sortByPopularityAndVote(sortType, 'popularity');
     } else if (sortType === SortType.VOTE_DESC || sortType == SortType.VOTE_ASC) {
-      this.sortByPopularityOrVote(sortType, 'vote_average')
+      this.sortByPopularityAndVote(sortType, 'vote_average')
     } else if (sortType == SortType.TITLE_DESC || sortType == SortType.TITLE_ASC) {
       this.sortByTitle(sortType, 'title');
     } else {
@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  sortByPopularityOrVote(sortType, selected) {
+  sortByPopularityAndVote(sortType, selected) {
     this.movies.sort((a, b) => {
       if (sortType.includes('fallande')) {
         return a[selected] > b[selected] ? -1 : 0
@@ -91,7 +91,7 @@ export class HomeComponent implements OnInit {
 
   sortByTitle(sortType, selected) {
     this.movies.sort((a, b) => {
-      if (sortType === SortType.TITLE_ASC) {
+      if (sortType.includes('Ö-A')) {
         return a[selected] > b[selected] ? -1 : 0
       } else {
         return b[selected] > a[selected] ? -1 : 0
@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
     this.movies.sort((a, b) => {
       let convertedDateA = Date.parse(a.release_date)
       let convertedDateB = Date.parse(b.release_date)
-      if (sortType == SortType.RELEASE_DATE_DESC) {
+      if (sortType.includes('fallande')) {
         return convertedDateA > convertedDateB ? -1 : 0;
       } else {
         return convertedDateB > convertedDateA ? -1 : 0;
